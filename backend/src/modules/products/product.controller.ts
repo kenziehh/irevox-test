@@ -7,25 +7,31 @@ import { JwtAuthGuard } from '../auth/guards/auth.guard';
 @Controller('products')
 @UseGuards(JwtAuthGuard)
 export class ProductController {
-  constructor(private productService: ProductService) {}
+    constructor(private productService: ProductService) { }
 
-  @Get()
-  async getUserProducts(@Request() req) {
-    return this.productService.getProductsByUser(req.user.userId);
-  }
+    @Get()
+    async getUserProducts(@Request() req) {
+        return this.productService.getProductsByUser(req.user.userId);
+    }
 
-  @Post()
-  async createProduct(@Request() req, @Body() dto: CreateProductDto) {
-    return this.productService.createProduct(req.user.userId, dto);
-  }
+    @Get(':id')
+    async getProductById(@Param('id') id: string, @Request() req) {
+        return this.productService.getProductById(id, req.user.userId);
+    }
 
-  @Put(':id')
-  async updateProduct(@Param('id') id: string, @Request() req, @Body() dto: UpdateProductDto) {
-    return this.productService.updateProduct(id, req.user.userId, dto);
-  }
 
-  @Delete(':id')
-  async deleteProduct(@Param('id') id: string, @Request() req) {
-    return this.productService.deleteProduct(id, req.user.userId);
-  }
+    @Post()
+    async createProduct(@Request() req, @Body() dto: CreateProductDto) {
+        return this.productService.createProduct(req.user.userId, dto);
+    }
+
+    @Put(':id')
+    async updateProduct(@Param('id') id: string, @Request() req, @Body() dto: UpdateProductDto) {
+        return this.productService.updateProduct(id, req.user.userId, dto);
+    }
+
+    @Delete(':id')
+    async deleteProduct(@Param('id') id: string, @Request() req) {
+        return this.productService.deleteProduct(id, req.user.userId);
+    }
 }

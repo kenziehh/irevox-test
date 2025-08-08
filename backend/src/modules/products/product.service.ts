@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { ProductRepository } from './product.repository';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -15,6 +15,19 @@ export class ProductService {
             throw new InternalServerErrorException('Failed to get products');
         }
     }
+
+    async getProductById(id: string, userId: string): Promise<Product> {
+        try {
+            const product = await this.productRepo.findById(id);
+            if (!product) throw new NotFoundException('Product not found');
+            if (product.userId !== userId) throw new ForbiddenException('Not authorized to access this product');
+            return product;
+        } catch (error) {
+            if (error instanceof NotFoundException || error instanceof ForbiddenException) throw error;
+            throw new InternalServerErrorException('Failed to get product');
+        }
+    }
+
 
     async createProduct(userId: string, dto: CreateProductDto): Promise<Product> {
         try {
