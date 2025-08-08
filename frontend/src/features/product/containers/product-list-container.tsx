@@ -19,25 +19,36 @@ import {
 import { Plus, Edit, Trash2 } from "lucide-react"
 import { Product } from "../types"
 import { useGetMyProducts } from "../services/use-get-my-products"
+import { useQueryClient } from "@tanstack/react-query"
+import { useDeleteProduct } from "../services/use-delete-product"
+import { toast } from "sonner"
+import { handleApiError } from "@/lib/error"
 
 export default function ProductListContainer() {
     const [deletingId, setDeletingId] = useState<string | null>(null)
+    const queryClient = useQueryClient()
 
 
-    const { data: products, isLoading } = useGetMyProducts()
+    const { data: products, isLoading, refetch } = useGetMyProducts()
 
 
-
-    const handleDelete = async (id: string) => {
-        setDeletingId(id)
-        try {
-            //   await deleteProduct(id)
-        } catch (error) {
-            console.error("Error deleting product:", error)
-            alert("Gagal menghapus produk")
-        } finally {
+    const deleteProductMutation = useDeleteProduct({
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["my-products"] })
+            refetch()
             setDeletingId(null)
-        }
+            toast.success("Produk berhasil dihapus")
+        },
+        onError: (error) => {
+            console.error("Error deleting product:", error)
+            toast.error(handleApiError(error))
+            setDeletingId(null)
+        },
+    })
+
+    const handleDelete = (id: string) => {
+        setDeletingId(id)
+        deleteProductMutation.mutate(id)
     }
 
     const formatPrice = (price: number) => {
