@@ -5,3 +5,9 @@ export interface Product {
     price: number;
     userId: string;
 }
+
+export interface ProductFormData {
+  name: string
+  description: string
+  price: number
+}

@@ -76,7 +76,7 @@ export default function ProductListContainer() {
                     <h1 className="text-3xl font-bold">Daftar Produk</h1>
                     <p className="text-gray-600 mt-2">Kelola semua produk Anda</p>
                 </div>
-                <Link href="/products/create">
+                <Link href="/dashboard/product/create">
                     <Button>
                         <Plus className="w-4 h-4 mr-2" />
                         Tambah Produk
@@ -90,7 +90,7 @@ export default function ProductListContainer() {
                         <div className="text-center">
                             <h3 className="text-lg font-semibold mb-2">Belum ada produk</h3>
                             <p className="text-gray-600 mb-4">Mulai dengan menambahkan produk pertama Anda</p>
-                            <Link href="/products/create">
+                            <Link href="/dashboard/product/create">
                                 <Button>
                                     <Plus className="w-4 h-4 mr-2" />
                                     Tambah Produk
@@ -126,7 +126,7 @@ export default function ProductListContainer() {
                                         <TableCell className="text-right font-semibold">{formatPrice(product.price)}</TableCell>
                                         <TableCell>
                                             <div className="flex gap-2 justify-center">
-                                                <Link href={`/products/${product.id}/edit`}>
+                                                <Link href={`/dashboard/product/${product.id}/edit`}>
                                                     <Button variant="outline" size="sm">
                                                         <Edit className="w-4 h-4" />
                                                     </Button>
