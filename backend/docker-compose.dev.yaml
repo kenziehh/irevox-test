@@ -1,0 +1,46 @@
+version: "3.9"
+
+name: irevoxtest
+
+services:
+  irevoxtest_db:
+    image: postgres:16
+    container_name: irevoxtest_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: irevoxtestdb
+    ports:
+      - "15432:5432"    
+    volumes:
+      - irevoxtest_postgres_data:/var/lib/postgresql/data
+    networks:
+      - irevoxtest_network
+
+  irevoxtest_api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: irevoxtest_api
+    command: pnpm run start:dev
+    restart: always
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@irevoxtest_db:5432/irevoxtestdb?schema=public
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
+    depends_on:
+      - irevoxtest_db
+    networks:
+      - irevoxtest_network
+
+volumes:
+  irevoxtest_postgres_data:
+  node_modules:
+
+networks:
+  irevoxtest_network:
+    driver: bridge
