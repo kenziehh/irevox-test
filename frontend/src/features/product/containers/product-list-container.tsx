@@ -16,7 +16,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Plus, Edit, Trash2 } from "lucide-react"
+import { Plus, Edit, Trash2, LogOut } from "lucide-react"
 import { Product } from "../types"
 import { useGetMyProducts } from "../services/use-get-my-products"
 import { useQueryClient } from "@tanstack/react-query"
@@ -76,12 +76,20 @@ export default function ProductListContainer() {
                     <h1 className="text-3xl font-bold">Daftar Produk</h1>
                     <p className="text-gray-600 mt-2">Kelola semua produk Anda</p>
                 </div>
-                <Link href="/dashboard/product/create">
-                    <Button>
-                        <Plus className="w-4 h-4 mr-2" />
-                        Tambah Produk
-                    </Button>
-                </Link>
+                <div className="flex gap-2 items-center">
+                    <Link href="/dashboard/product/create">
+                        <Button>
+                            <Plus className="w-4 h-4 mr-2" />
+                            Tambah Produk
+                        </Button>
+                    </Link>
+                    <Link href="/auth/logout">
+                        <Button variant={"outline"}>
+                            <LogOut className="w-4 h-4 mr-2" />
+                            Logout
+                        </Button>
+                    </Link>
+                </div>
             </div>
 
             {!isLoading && (products?.length ?? 0) === 0 ? (
